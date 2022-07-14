@@ -1,0 +1,30 @@
+package com.atguigu.sparksql
+
+import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.{SparkConf, SparkContext}
+
+/**
+ * @author layne
+ */
+object SparkSQL01_input {
+  def main(args: Array[String]): Unit = {
+    //TODO 1 创建SparkConf配置文件,并设置App名称
+    val conf = new SparkConf().setAppName("SparkSQLTest").setMaster("local[*]")
+    //TODO 2 利用SparkConf创建sparksession对象
+    val spark: SparkSession = SparkSession.builder().config(conf).getOrCreate()
+
+    val df: DataFrame = spark.read.json("D:\\IdeaProjects\\SparkSQL0108\\input\\user.json")
+
+    df.show()
+
+    df.createOrReplaceTempView("user")
+
+    spark.sql("select * from user order by age").show()
+
+
+    //TODO 3 关闭资源
+    spark.stop()
+
+  }
+
+}
